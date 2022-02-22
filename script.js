@@ -1,26 +1,25 @@
-"use strict";
+const container = document.createElement("div")
+container.classList.add("container")
 
-const container = document.querySelector('.countries');
+const image = document.createElement("img")
+image.classList.add("img")
+const button = document.createElement("button")
+button.innerText = "click"
 
-const renderCountry = function (data, className = "") {
-  const html = `
-  <article class="country ${className}">
-    <img class="country__img" src="${data.flag}" />
-      <div class="country__data">
-          <h4 class="country__name">Name: ${data.name}</h4>
-          <h4 class="country__capital">Capital: ${data.capital}</h4>
-       </div>
-  </article>
-`
-container.insertAdjacentHTML("beforeend", html)
-}
+document.body.appendChild(container)
+container.appendChild(image)
+container.appendChild(button)
 
-const getCountryData = (country) => {
-  fetch(`https://restcountries.com/v2/name/${country}`).then(
-    response => response.json()).then(
-      data => renderCountry(data[0])
-    ).then(data => renderCountry(data, "neighbour"))
-}
+const img = document.querySelector(".img")
 
-getCountryData("algeria")
-
+button.addEventListener("click", () => {
+    console.log("working!")
+    fetch("https://api.giphy.com/v1/gifs/translate?api_key=IDGzSuuAs0D94d7tjUw9ymDha8gXyjIX&s=cats",
+        { mode: 'cors' })
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (response) {
+        img.src = response.data.images.original.url;
+    });
+})
