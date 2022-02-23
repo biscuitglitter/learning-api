@@ -18,28 +18,27 @@ container.appendChild(button)
 container.appendChild(h4)
 container.appendChild(image)
 
-button.addEventListener("click", () => {    
+button.addEventListener("click", () => {
     const input = document.querySelector("input")
-    const search = input.value 
+    const search = input.value
     renderGif(search)
     document.querySelector("input").value = "";
 })
 
-const renderGif = (search) => {
-    h4.style.display = "none"
-    fetch(`https://api.giphy.com/v1/gifs/translate?api_key=IDGzSuuAs0D94d7tjUw9ymDha8gXyjIX&s=${search}`,
-        { mode: "cors" })
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (response) {
-            const img = document.querySelector(".img")
-            img.src = response.data.images.original.url;
-        }).catch(function (err) {
-            const h4 = document.querySelector("h4")
-            console.log("error detected")
-            h4.innerText = "Try again?"
-            h4.style.display = "flex"
-            document.querySelector("input").focus()
-        })
+const img = document.querySelector(".img")
+const text = document.querySelector("h4")
+
+async function renderGif(search) {
+    text.style.display = "none"
+    try {
+        const response = await fetch(`https://api.giphy.com/v1/gifs/translate?api_key=IDGzSuuAs0D94d7tjUw9ymDha8gXyjIX&s=${search}`,
+            { mode: "cors" });
+        const searchData = await response.json();
+        img.src = searchData.data.images.original.url;
+        return img.src
+    } catch (err) {
+        text.innerText = "Try again?"
+        text.style.display = "flex"
+        document.querySelector("input").focus()
+    }
 }
